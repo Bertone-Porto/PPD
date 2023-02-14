@@ -37,7 +37,7 @@ int main(int argc,char *argv[]) {
    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    if (rank == 0){
+   if (rank == 0){
        dest = rank+1;
        outmsg = atoi(argv[1]);
        FILE *fp; fp = fopen(argv[2], "w");
