@@ -38,29 +38,29 @@ int main(int argc,char *argv[]) {
    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     if (rank == 0){
-       dest = rank+1; 
+       dest = rank+1;
        outmsg = atoi(argv[1]);
        FILE *fp; fp = fopen(argv[2], "w");
        fprintf(fp, "Valor inicial %d \n", outmsg);
        MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
        for (fonte = 1; fonte < numtasks; fonte++){
-            MPI_Recv(&inmsg, 1, MPI_INT, fonte, tag, MPI_COMM_WORLD, &Stat); 
-            fprintf(fp, "Recebido %d da Task %d \n", inmsg, fonte);
-       } fclose(fp);
+            MPI_Recv(&inmsg, 1, MPI_INT, fonte, tag, MPI_COMM_WORLD, &Stat);
+            fprintf(fp, "Identificação: %d valor %d \n", fonte, inmsg);
+       } 
+       fclose(fp);
    } else if (rank == numtasks-1) {
        fonte = rank-1;
        MPI_Recv(&inmsg, 1, MPI_INT, fonte, tag, MPI_COMM_WORLD, &Stat);
-       outmsg = inmsg + rank; 
-       MPI_Send(&outmsg, 1, MPI_INT, 0, tag, MPI_COMM_WORLD); 
+       outmsg = inmsg + rank;
+       MPI_Send(&outmsg, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
    } else {
        fonte = rank-1;
-       MPI_Recv(&inmsg, 1, MPI_INT, fonte, tag, MPI_COMM_WORLD, &Stat); 
-       dest = rank+1; 
+       MPI_Recv(&inmsg, 1, MPI_INT, fonte, tag, MPI_COMM_WORLD, &Stat);
+       dest = rank+1;
        outmsg = inmsg + rank;
        MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-       MPI_Send(&outmsg, 1, MPI_INT, 0, tag, MPI_COMM_WORLD); 
+       MPI_Send(&outmsg, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
    }
-
    MPI_Finalize();
 
-} 
+}
