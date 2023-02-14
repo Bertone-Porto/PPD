@@ -41,6 +41,7 @@ double atoint(char * arg){
 int main(int argc,char *argv[]) {
    int numtasks, rank, dest, source, count, tag = 0;
    int inmsg, outmsg, cont, i;
+   //int cont =0;
    double tamanho; double trocas;
    double * vet;
    MPI_Status Stat;
@@ -66,6 +67,7 @@ int main(int argc,char *argv[]) {
       } 
       double final_time = MPI_Wtime() - before; 
       printf("Tempo de execução: %lf\n",final_time);
+      //cont=0
       
    } else {
      while (cont++ < trocas){
