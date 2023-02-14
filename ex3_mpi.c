@@ -28,7 +28,7 @@ int power(int x, int y){
     } return x;
 }
 
-int atoint(char * arg){
+double atoint(char * arg){
    int i, value, sizeArgv;
    value = 0; sizeArgv = 0;
    for (i = 0; arg[i] != '\0'; i++)
@@ -39,10 +39,9 @@ int atoint(char * arg){
 }
 
 int main(int argc,char *argv[]) {
-
    int numtasks, rank, dest, source, count, tag = 0;
    int inmsg, outmsg, cont, i;
-   int tamanho; int trocas;
+   double tamanho; double trocas;
    double * vet;
    MPI_Status Stat;
 
@@ -51,34 +50,30 @@ int main(int argc,char *argv[]) {
    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
    tamanho = atoint(argv[1]); trocas = atoint(argv[2]);
+	//tamanho = atoi(argv[1]); trocas = atoi(argv[2]);
 
    vet = (double*) malloc(tamanho * sizeof(double*));
    for (i = 0; i < tamanho; i++) 
       vet[i] = -1;
       
    if (rank == 0){
-      
       double before = MPI_Wtime();
-   
       while (cont++ < trocas){
          for (i = 0; i < tamanho; i++) 
             vet[i] = 4;
          MPI_Send(vet, tamanho, MPI_DOUBLE, 1, tag, MPI_COMM_WORLD);
       	 MPI_Recv(vet, tamanho, MPI_DOUBLE, 1, tag, MPI_COMM_WORLD, &Stat);
       } 
-      
       double final_time = MPI_Wtime() - before; 
       printf("Tempo de execução: %lf\n",final_time);
       
    } else {
-  
      while (cont++ < trocas){
         MPI_Recv(vet, tamanho, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD, &Stat);
         for (i = 0; i < tamanho; i++) 
             vet[i] = 2;
         MPI_Send(vet, tamanho, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD);
-     } 
-     
+     }  
    }
    
    MPI_Finalize();
