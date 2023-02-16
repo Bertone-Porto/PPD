@@ -17,9 +17,8 @@ MPI_ANY_TAG. A implementação MPI é justa?
 #include <stdlib.h>
 
 int main(int argc,char *argv[]) {
-   int numtasks, rank, dest, source, count, tag=1;
+   int numtasks, rank, dest, source, tag=1;
    int inmsg, outmsg;
-   //char * outmsg;
    MPI_Status Stat;
 
    MPI_Init(&argc,&argv);
