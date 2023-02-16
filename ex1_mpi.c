@@ -28,13 +28,12 @@ e assim por diante.
 #include <stdlib.h>
 
 int main(int argc,char *argv[]) {
-
-   int numtasks, rank, dest, fonte, count, tag=1;
+   int tasks, rank, dest, fonte, count, tag=1;
    int inmsg, outmsg;
    MPI_Status Stat;
 
    MPI_Init(&argc,&argv);
-   MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+   MPI_Comm_size(MPI_COMM_WORLD, &tasks);
    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
    if (rank == 0){
@@ -43,12 +42,12 @@ int main(int argc,char *argv[]) {
        FILE *fp; fp = fopen(argv[2], "w");
        fprintf(fp, "Valor inicial %d \n", outmsg);
        MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-       for (fonte = 1; fonte < numtasks; fonte++){
+       for (fonte = 1; fonte < tasks; fonte++){
             MPI_Recv(&inmsg, 1, MPI_INT, fonte, tag, MPI_COMM_WORLD, &Stat);
             fprintf(fp, "Identificação: %d valor %d \n", fonte, inmsg);
        } 
        fclose(fp);
-   } else if (rank == numtasks-1) {
+   } else if (rank == tasks-1) {
        fonte = rank-1;
        MPI_Recv(&inmsg, 1, MPI_INT, fonte, tag, MPI_COMM_WORLD, &Stat);
        outmsg = inmsg + rank;
